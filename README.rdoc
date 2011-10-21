@@ -40,5 +40,5 @@ controller の後ろに、カッコで括って条件を指定できる
 
 has_one の関係なら、 (member_log.member.name:田中) というように、チェーン表記することが出来る
 
-複数のカラムで検索する場合、 member_log(action_type,member.name:3000,田中) というように指定する
+複数のカラムで検索する場合、 member_log(action_type:3000,member.name:田中) というように指定する
 

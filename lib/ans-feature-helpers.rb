@@ -3,7 +3,7 @@ require "ans-feature-helpers/version"
 module Ans
   module Feature
     module Helpers
-      # Your code goes here...
+      autoload :PathHelper, "ans-feature-helpers/path_helper"
     end
   end
 end

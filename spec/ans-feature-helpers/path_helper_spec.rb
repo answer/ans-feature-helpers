@@ -5,23 +5,11 @@ require 'spec_helper'
 module Ans::Feature::Helpers::PathHelper
   module ComponentSpecHelper
     module Regex
-      def action_は(&block)
-        if block
-          @action = block
-        else
-          @action.call
-        end
-      end
+      include ::Ans::Feature::Helpers::ActionHelper
     end
 
     module Path
-      def action_は(&block)
-        if block
-          @action = block
-        else
-          @action.call
-        end
-      end
+      include ::Ans::Feature::Helpers::ActionHelper
     end
   end
 

@@ -1,0 +1,41 @@
+= ans-feature-helpers
+
+cucumber の feature のヘルパー
+
+
+== INSTALL
+
+features/support/path.rb に以下を記述
+
+ module NavigationHelpers
+   include Ans::Feature::Helpers::PathHelper
+
+   ...
+
+   when Component.regex
+     method, args = Component.path
+	 self.send method, *args
+
+   ...
+ end
+
+
+== 使用可能になるパス
+
+* 'member'一覧
+* 'member'新規作成
+* 'member'新規作成エラー
+* 'member(name:田中)'詳細
+* 'member(name:田中)'編集
+* 'member(name:田中)'編集エラー
+* 'member(name:田中)'の'member_log'一覧
+
+* 'member_log(member.name:田中)'詳細
+
+基本的に、 'controller'の{action} というようにパスを指定する
+最終的に、 "#{controller}_path" というようなパスに整形される
+
+controller の後ろに、カッコで括って条件を指定できる
+has_one の関係なら、 (member_log.member.name:田中) というように、チェーン表記することが出来る
+複数のカラムで検索する場合、 member_log(action_type,member.name:3000,田中) というように指定する
+

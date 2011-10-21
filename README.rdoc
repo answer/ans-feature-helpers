@@ -1,9 +1,11 @@
 = ans-feature-helpers
 
-cucumber の feature のヘルパー
+テストに関連するヘルパーを提供する
+
+cucumber の feature に限らず rspec 用のヘルパーもある
 
 
-== INSTALL
+== PathHelper
 
 features/support/path.rb に以下を記述
 
@@ -20,7 +22,7 @@ features/support/path.rb に以下を記述
  end
 
 
-== 使用可能になるパス
+以下のパスが使用可能になる
 
 * 'member'一覧
 * 'member'新規作成
@@ -41,4 +43,59 @@ controller の後ろに、カッコで括って条件を指定できる
 has_one の関係なら、 (member_log.member.name:田中) というように、チェーン表記することが出来る
 
 複数のカラムで検索する場合、 member_log(action_type:3000,member.name:田中) というように指定する
+
+
+== ActionHelper
+
+action_は メソッドを定義する
+
+指定したブロックを保存して、後で実行する
+
+ module ...SpecHelper
+   include ::Ans::Feature::Helpers::ActionHelper
+ end
+
+ describe ... do
+   include ...SpecHelper
+
+   before do
+     action_は do
+       テストするコード
+     end
+   end
+
+   it "は、 ... する" do
+     action_は.should == "..."
+   end
+ end
+
+
+== HelperHelper
+
+helper のスペックを記述するヘルパー
+
+helper で BasicObject のインスタンスを返す
+
+mixin で helper にモジュールをミックスインする
+
+ActionHelper はすでにミックスインされている
+
+ module ...SpecHelper
+   include ::Ans::Feature::Helpers::HelperHelper
+ end
+
+ describe ... do
+   include ...SpecHelper
+
+   before do
+     mixin ...Helper
+     action_は do
+       helper.method
+     end
+   end
+
+   it "は、 ... する" do
+     action_は.should == "..."
+   end
+ end
 

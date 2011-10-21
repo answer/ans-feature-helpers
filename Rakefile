@@ -1,1 +1,1 @@
-require "bundler/gem_tasks"
+require "ans-gem-builder/install_tasks"

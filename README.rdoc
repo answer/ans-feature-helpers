@@ -13,7 +13,7 @@ features/support/path.rb に以下を記述
    ...
 
    when Component.regex
-     method, args = Component.path
+     method, args = Component.path $~
      self.send method, *args
 
    ...

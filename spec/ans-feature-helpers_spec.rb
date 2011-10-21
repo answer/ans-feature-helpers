@@ -14,9 +14,9 @@ module Ans::Feature::Helpers
       ActionHelper.should == ActionHelper
     end
   end
-  #describe HelperHelper do
-  #  it "はロードできる" do
-  #    HelperHelper.should == HelperHelper
-  #  end
-  #end
+  describe HelperHelper do
+    it "はロードできる" do
+      HelperHelper.should == HelperHelper
+    end
+  end
 end

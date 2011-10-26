@@ -4,10 +4,10 @@ module Ans::Feature::Helpers::PathHelper
   module Component
     class << self
       def regex
-        /^((?:'(?:[^'(]+)(?:\((?:[^']+)\))?'の)*)'([^'(]+)(?:\(([^']+)\))?'(一覧|新規作成(?:エラー)?|詳細|編集(?:エラー)?)$/
+        /^((?:'(?:[^'(]+)(?:\((?:[^']+)\))?'の)*)'([^'(]+)(?:\(([^']+)\))?'(一覧|新規作成(?:エラー)?|詳細|編集(?:エラー)?)(?:\((.+)\))?$/
       end
       def path(match)
-        match, tips, model, condition, page = *match
+        match, tips, model, condition, page, sub = *match
 
         path_components = []
         values = []
@@ -17,6 +17,8 @@ module Ans::Feature::Helpers::PathHelper
           path_components << path_component
           values << value
         end
+
+        path_components << sub if sub
 
         case page
         when /^一覧|新規作成エラー$/
@@ -75,9 +77,16 @@ module Ans::Feature::Helpers::PathHelper
       def condition_match(condition)
         [].tap{|result|
           until condition.blank?
-            condition =~ /^([^:]+):([^,]+),?/
-            result << [$1,$2]
-            condition = $'
+            condition =~ /^([^=]+)=([^,]+),?/
+            name, value, condition = $1, $2, $'
+
+            case name
+            when /_H$/
+              name.gsub! /_H$/, "_datetime"
+              value = Time.parse(value)
+            end
+
+            result << [name,value]
           end
         }
       end

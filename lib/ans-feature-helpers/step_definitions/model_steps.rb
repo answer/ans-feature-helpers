@@ -31,7 +31,7 @@ Given /^以下の"([^"]*)"が存在する:$/ do |model,table|
             }
 
             model = models.pop
-            value = Object.const_get(model.camelize).send :"find_by_#{names.join("_and_")}!", values
+            value = Object.const_get(model.camelize).send :"find_by_#{names.join("_and_")}!", *values
 
             name = "#{model}_id"
             until models.blank?

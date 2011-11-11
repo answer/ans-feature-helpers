@@ -125,22 +125,33 @@ ActionHelper はすでにミックスインされている
  end
 
 
-== shared_examples_for "Ans::Feature::Helpers::SignIn"
+== コントローラー用基本 shared_examples
 
-コントローラー用 shared_examples
+=== Ans::Feature::Helpers::BasicControllerSpecHelper
 
-認証が必要なアクションを実行した時のスペックを記述する
+以下のメソッドを最定義する必要がある
 
- module Ans::Feature::Helpers::SignInHelper
+ module Ans::Feature::Helpers::BasicControllerSpecHelper
    def sign_in_path
      manage_user_session_path
    end
  end
 
- require "ans-feature-helpers/shared_examples/sign_in"
+sign_in_path の定義は、適当なパスに定義しておいて、 require すること
+
+BasicControllerSpecHelper には、 ActionHelper が include されている
+
+action_は ブロックの実行で、 sign_in_path にリダイレクトしない場合は失敗する
+
+
+=== shared_examples_for "Ans::Feature::Helpers::SignIn"
+
+認証が必要なアクションを、認証しないで呼び出した場合に、特定のパスにリダイレクトすること
+
+ require "ans-feature-helpers/shared_examples/basic_controller"
 
  module ...SpecHelper
-   include Ans::Feature::Helpers::SignInHelper
+   include Ans::Feature::Helpers::BasicControllerSpecHelper
  end
 
  describe ... do
@@ -155,8 +166,33 @@ ActionHelper はすでにミックスインされている
    it_should_behave_like "Ans::Feature::Helpers::SignIn"
  end
 
-Ans::Feature::Helpers::SignInHelper の sign_in_path の定義は、適当なパスに定義しておいて、 require する
+xhr で通信する場合は、以下を使用する
 
-SignInHelper には、 ActionHelper が include されている
+ describe ... do
+   include ...SpecHelper
 
-action_は ブロックの実行で、 sign_in_path にリダイレクトしない場合は失敗する
+   before do
+     action_は do
+       xhr :get, :action, params: { name: "value" }
+     end
+   end
+
+   it_should_behave_like "Ans::Feature::Helpers::SignIn(xhr)"
+ end
+
+xhr な destroy アクションの場合は以下を使用する
+
+ describe ... do
+   include ...SpecHelper
+
+   before do
+     action_は do
+       xhr :delete, :action, params: { name: "value" }
+     end
+   end
+
+   it_should_behave_like "Ans::Feature::Helpers::SignIn(xhr-destroy)"
+ end
+
+xhr 版は、レスポンスコードのチェックだけを行う
+

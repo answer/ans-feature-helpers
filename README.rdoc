@@ -124,3 +124,40 @@ ActionHelper はすでにミックスインされている
    end
  end
 
+
+== shared_examples_for "要認証ページ"
+
+コントローラー用 shared_examples
+
+認証が必要なアクションを実行した時のスペックを記述する
+
+ module Ans::Feature::Helpers::SignInHelper
+   def sign_in_path
+     manage_user_session_path
+   end
+ end
+
+ require "ans-feature-helpers/shared_examples/sign_in"
+
+ module ...SpecHelper
+   include Ans::Feature::Helpers::SignInHelper
+ end
+
+ describe ... do
+   include ...SpecHelper
+
+   before do
+     action_は do
+       get :action, params: { name: "value" }
+     end
+   end
+
+   it_should_behave_like "要認証ページ"
+ end
+
+Ans::Feature::Helpers::SignInHelper の sign_in_path の定義は、適当なパスに定義しておいて、 require する
+
+SignInHelper には、 ActionHelper が include されている
+
+action_は ブロックの実行で、 sign_in_path にリダイレクトしない場合は失敗する
+

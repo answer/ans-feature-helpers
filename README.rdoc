@@ -125,7 +125,7 @@ ActionHelper はすでにミックスインされている
  end
 
 
-== shared_examples_for "要認証ページ"
+== shared_examples_for "Ans::Feature::Helpers::SignIn"
 
 コントローラー用 shared_examples
 
@@ -152,7 +152,7 @@ ActionHelper はすでにミックスインされている
      end
    end
 
-   it_should_behave_like "要認証ページ"
+   it_should_behave_like "Ans::Feature::Helpers::SignIn"
  end
 
 Ans::Feature::Helpers::SignInHelper の sign_in_path の定義は、適当なパスに定義しておいて、 require する
@@ -160,4 +160,3 @@ Ans::Feature::Helpers::SignInHelper の sign_in_path の定義は、適当なパ
 SignInHelper には、 ActionHelper が include されている
 
 action_は ブロックの実行で、 sign_in_path にリダイレクトしない場合は失敗する
-

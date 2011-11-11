@@ -8,7 +8,7 @@ module Ans
       autoload :ActionHelper, "ans-feature-helpers/action_helper"
       autoload :HelperHelper, "ans-feature-helpers/helper_helper"
 
-      autoload :SignInHelper, "ans-feature-helpers/sign_in_helper"
+      autoload :BasicControllerSpecHelper, "ans-feature-helpers/basic_controller_spec_helper"
     end
   end
 end

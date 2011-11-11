@@ -1,5 +1,5 @@
 module Ans::Feature::Helpers
-  module SignInHelper
+  module BasicControllerSpecHelper
     include ActionHelper
   end
 end

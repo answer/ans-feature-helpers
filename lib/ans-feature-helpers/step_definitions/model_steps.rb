@@ -1,52 +1,48 @@
 # vi: set fileencoding=utf-8
 
 Given /^"([^"]*)"をクリアする$/ do |model|
-  Object.const_get(model).delete_all
+  class << self
+    include Ans::Feature::Helpers::ModelHelper
+  end
+
+  modelize(model).delete_all
 end
 Given /^以下の"([^"]*)"が存在する:$/ do |model,table|
-  convert_name_value = lambda{|name,value|
-    case name
-    when /_H$/
-      name = name.gsub /_H$/, "_datetime"
-      value = Time.parse(value)
-    end
+  class << self
+    include Ans::Feature::Helpers::ModelHelper
+  end
 
-    [name, value]
-  }
-
-  Object.const_get(model).create!([].tap{|hashes|
+  modelize(model).create!([].tap{|hashes|
     table.hashes.each do |hash|
       hashes << {}.tap{|row|
         hash.each do |name,value|
-          case name
-          when /\./
-            models = name.split(".")
-            name = models.pop
-            names, values = [[],[]].tap{|names,values|
-              name.split(",").zip(value.split(",")).each do |name,value|
-                name, value = convert_name_value.call name, value
-                names << name
-                values << value
-              end
-            }
-
-            model = models.pop
-            value = Object.const_get(model.camelize).send(:"find_by_#{names.join("_and_")}!", *values).id
-
-            name = "#{model}_id"
-            until models.blank?
-              model = models.pop
-              value = Object.const_get(model.camelize).send(:"find_by_#{name}!", value).id
-              name = "#{model}_id"
-            end
-
-            row[name] = value
-          else
-            name, value = convert_name_value.call name, value
-            row[name] = value
-          end
+          name, value = column_pair model,name,value
+          row[name] = value
         end
       }
     end
   })
+end
+Then /^以下の"([^"(]*)\(([^")]*)\)"が存在すること:$/ do |model,keys,table|
+  class << self
+    include Ans::Feature::Helpers::ModelHelper
+  end
+
+  table.hashes.each do |hash|
+    item = find! model,keys,hash
+
+    hash.each do |name,value|
+      name, value = column_pair model,name,value
+      item[name].should == value
+    end
+  end
+end
+Then /^以下の"([^"(]*)\(([^")]*)\)"が存在しないこと:$/ do |model,keys,table|
+  class << self
+    include Ans::Feature::Helpers::ModelHelper
+  end
+
+  table.hashes.each do |hash|
+    find(model,keys,hash).should == nil
+  end
 end

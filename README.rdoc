@@ -58,16 +58,38 @@ step_definitions のどれかで require することで、以下の step が追
 
 === 以下の"..."をクリアする
 
-... には Member 等を指定すると、 Member.delete_all する
+... に Member 等を指定すると、 Member.delete_all する
 
 
 === 以下の"..."が存在する:
 
-... には例えば Member 等を指定すると、 Member のデータを用意する
+... に Member 等を指定すると、 Member のデータを用意する
 
 has_one の関係なら、 member_log.member.name というように、チェーンでカラムを指定できる
 
 日付時刻カラムは *_H=時間 で指定することができ、「時間」部分は Time.parse で処理される
+
+
+=== 以下の"..."が存在すること:
+
+ ならば 以下の"Member(login_id)"が存在すること:
+   | login_id | name | memo |
+   | hoge | 田中角栄 | 備考 |
+
+カッコの中に指定したカラムで find_by_* して、テーブルで指定したカラムをマッチさせる
+
+複数のキーを指定する必要がある場合、カンマで区切る
+
+
+=== 以下の"..."が存在しないこと:
+
+ ならば 以下の"Member(login_id)"が存在しないこと:
+   | login_id |
+   | hoge |
+
+カッコの中に指定したカラムで find_by_* して、存在しないことをテストする
+
+複数のキーを指定する必要がある場合、カンマで区切る
 
 
 == ActionHelper

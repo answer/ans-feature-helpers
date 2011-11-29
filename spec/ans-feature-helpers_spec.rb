@@ -3,20 +3,17 @@
 require 'spec_helper'
 
 module Ans::Feature::Helpers
-  describe PathHelper do
-    it "はロードできる" do
-      PathHelper.should == PathHelper
-    end
-  end
+  describe "autoload" do
+    it "は配下のモジュールの autoload を定義する" do
+      [
+        PathHelper,
+        ModelHelper,
 
-  describe ActionHelper do
-    it "はロードできる" do
-      ActionHelper.should == ActionHelper
-    end
-  end
-  describe HelperHelper do
-    it "はロードできる" do
-      HelperHelper.should == HelperHelper
+        ActionHelper,
+        HelperHelper,
+
+        BasicControllerSpecHelper,
+      ]
     end
   end
 end

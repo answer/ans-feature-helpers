@@ -2,27 +2,24 @@
 
 module Ans::Feature::Helpers::ModelHelper
   def find(model,keys,hash)
-    keys, values = finder_keys model,keys,hash
+    keys, values = finder_keys keys,hash
     modelize(model).send(:"find_by_#{keys.join("_and_")}", *values)
   end
   def find!(model,keys,hash)
-    keys, values = finder_keys model,keys,hash
+    keys, values = finder_keys keys,hash
     modelize(model).send(:"find_by_#{keys.join("_and_")}!", *values)
   end
-  def finder_keys(model,keys,hash)
-    keys = []
-    values = []
-
-    keys.split(/,/).each do |name|
-      name, value = column_pair model,name,hash[name]
-      keys << name
-      values << value
-    end
-
-    [keys, values]
+  def finder_keys(keys,hash)
+    [[],[]].tap{|k,v|
+      keys.split(/,/).each do |name|
+        name, value = column_pair name,hash[name]
+        k << name
+        v << value
+      end
+    }
   end
 
-  def column_pair(model,name,value)
+  def column_pair(name,value)
     case name
     when /\./
       models = name.split(".")

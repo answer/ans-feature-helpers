@@ -16,7 +16,7 @@ Given /^以下の"([^"]*)"が存在する:$/ do |model,table|
     table.hashes.each do |hash|
       hashes << {}.tap{|row|
         hash.each do |name,value|
-          name, value = column_pair model,name,value
+          name, value = column_pair name,value
           row[name] = value
         end
       }
@@ -32,7 +32,7 @@ Then /^以下の"([^"(]*)\(([^")]*)\)"が存在すること:$/ do |model,keys,ta
     item = find! model,keys,hash
 
     hash.each do |name,value|
-      name, value = column_pair model,name,value
+      name, value = column_pair name,value
       item[name].should == value
     end
   end

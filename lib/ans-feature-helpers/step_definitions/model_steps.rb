@@ -33,7 +33,7 @@ Then /^以下の"([^"(]*)\(([^")]*)\)"が存在すること:$/ do |model,keys,ta
 
     hash.each do |name,value|
       name, value = column_pair name,value
-      item[name].should == value
+      item[name].to_s.should == value.to_s
     end
   end
 end

@@ -56,12 +56,12 @@ has_one の関係なら、 (member_log.member.name=田中) というように、
 step_definitions のどれかで require することで、以下の step が追加される
 
 
-=== 以下の"..."をクリアする
+=== 前提 以下の"..."をクリアする
 
 ... に Member 等を指定すると、 Member.delete_all する
 
 
-=== 以下の"..."が存在する:
+=== 前提 以下の"..."が存在する:
 
 ... に Member 等を指定すると、 Member のデータを用意する
 
@@ -70,7 +70,7 @@ has_one の関係なら、 member_log.member.name というように、チェー
 日付時刻カラムは *_H=時間 で指定することができ、「時間」部分は Time.parse で処理される
 
 
-=== 以下の"..."が存在すること:
+=== ならば 以下の"..."が存在すること:
 
  ならば 以下の"Member(login_id)"が存在すること:
    | login_id | name | memo |
@@ -83,7 +83,7 @@ has_one の関係なら、 member_log.member.name というように、チェー
 各値は、互いに to_s した形式で比較されるので、少々あれかもしれない
 
 
-=== 以下の"..."が存在しないこと:
+=== ならば 以下の"..."が存在しないこと:
 
  ならば 以下の"Member(login_id)"が存在しないこと:
    | login_id |
@@ -92,6 +92,18 @@ has_one の関係なら、 member_log.member.name というように、チェー
 カッコの中に指定したカラムで find_by_* して、存在しないことをテストする
 
 複数のキーを指定する必要がある場合、カンマで区切る
+
+
+== ans-feature-helpers/step_definitions/pending_steps.rb
+
+step_definitions のどれかで require することで、以下の step が追加される
+
+
+=== 前提 "..."が空の場合は中止
+
+... に Rails.root からの相対パスを指定すると、指定したパスのファイルの内容が空の場合、 pending される
+
+ファイルが存在しない場合はテスト失敗となる
 
 
 == ActionHelper

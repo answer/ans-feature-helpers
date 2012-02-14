@@ -40,4 +40,21 @@ module Ans::Feature::Helpers
       action_は.should == @item
     end
   end
+
+  describe ActionHelper, "#the_action" do
+    include ActionHelperSpecHelper::Action
+
+    before do
+      @item = Object.new
+
+      mixin ActionHelper
+      action_は do
+        helper.the_action{@item}
+        helper.the_action
+      end
+    end
+    it "で、指定したブロックを評価して返す" do
+      action_は.should == @item
+    end
+  end
 end

@@ -130,6 +130,8 @@ action_は メソッドを定義する
    end
  end
 
+the_action メソッドは action_は のエイリアス
+
 
 == HelperHelper
 

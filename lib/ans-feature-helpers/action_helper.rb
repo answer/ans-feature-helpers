@@ -8,4 +8,6 @@ module Ans::Feature::Helpers::ActionHelper
       @action.call
     end
   end
+
+  alias_method :the_action, :"action_は"
 end

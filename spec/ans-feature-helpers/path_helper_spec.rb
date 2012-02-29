@@ -40,6 +40,10 @@ module Ans::Feature::Helpers::PathHelper
       class ::ControllerLog; end
       class ::ControllerDetailLog; end
 
+      module ::Ans
+        class MyController; end
+      end
+
       @items = {
         item: Object.new,
         item2: Object.new,
@@ -70,6 +74,8 @@ module Ans::Feature::Helpers::PathHelper
           stub(@items[:item2]).id{@items[:id]}
           stub(::Controller).find_by_controller_log_id!(@items[:id]){@items[:item]}
         },
+
+        ans_controller_values: proc{ stub(::Ans::MyController).find_by_name_and_value!("名前","値"){@items[:item]} },
       }
     end
 
@@ -103,6 +109,9 @@ module Ans::Feature::Helpers::PathHelper
       [ "'controller(name=名前)'詳細(sumup)",       [:sumup_controller_path,      [:item]], [:controller] ],
       [ "'controller(name=名前)'編集(sumup)",       [:edit_sumup_controller_path, [:item]], [:controller] ],
       [ "'controller(name=名前)'編集エラー(sumup)", [:sumup_controller_path,      [:item]], [:controller] ],
+
+      [ "'Ans::MyController'一覧",                     [:ans_my_controllers_path, []] ],
+      [ "'Ans::MyController(name=名前,value=値)'詳細", [:ans_my_controller_path, [:item]], [:ans_controller_values] ],
     ].each do |path,expect,stub_procs|
       describe "#{path}" do
         it "で、 #{expect[0]} を返す" do

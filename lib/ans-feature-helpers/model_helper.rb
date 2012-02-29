@@ -59,6 +59,18 @@ module Ans::Feature::Helpers::ModelHelper
     [name, value]
   end
   def modelize(model)
-    Object.const_get(model.camelize)
+    hierarchy = model.camelize.split("::")
+    model_class = hierarchy.pop
+
+    parent = Object
+    hierarchy.each do |p|
+      if p == ""
+        parent = Object
+      else
+        parent = parent.const_get(p)
+      end
+    end
+
+    parent.const_get(model_class)
   end
 end

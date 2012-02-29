@@ -143,15 +143,33 @@ module Ans::Feature::Helpers
     end
 
     describe "#modelize" do
-      before do
-        class ::AnsFeatureHelpersModelHelperSpecHelperModelize; end
-        action_は do
-          helper.modelize "ans_feature_helpers_model_helper_spec_helper_modelize"
+
+      context "モジュールを含まない場合" do
+        before do
+          class ::AnsFeatureHelpersModelHelperSpecHelperModelize; end
+          action_は do
+            helper.modelize "ans_feature_helpers_model_helper_spec_helper_modelize"
+          end
+        end
+        it "は、 camelize したクラスを取得する" do
+          action_は.should == AnsFeatureHelpersModelHelperSpecHelperModelize
         end
       end
-      it "は、 camelize したクラスを取得する" do
-        action_は.should == AnsFeatureHelpersModelHelperSpecHelperModelize
+
+      context "モジュールを含む場合" do
+        before do
+          module ::Ans
+            class FeatureHelpersModelHelperSpecHelperModelize; end
+          end
+          action_は do
+            helper.modelize "Ans::FeatureHelpersModelHelperSpecHelperModelize"
+          end
+        end
+        it "は、適切なクラスを取得する" do
+          action_は.should == ::Ans::FeatureHelpersModelHelperSpecHelperModelize
+        end
       end
+
     end
   end
 end

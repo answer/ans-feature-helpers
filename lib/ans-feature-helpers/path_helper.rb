@@ -3,6 +3,8 @@
 module Ans::Feature::Helpers::PathHelper
   module Component
     class << self
+      include Ans::Feature::Helpers::ModelHelper
+
       def regex
         /^((?:'(?:[^'(]+)(?:\((?:[^']+)\))?'の)*)'([^'(]+)(?:\(([^']+)\))?'(一覧|新規作成(?:エラー)?|詳細|編集(?:エラー)?)(?:\((.+)\))?$/
       end
@@ -34,7 +36,7 @@ module Ans::Feature::Helpers::PathHelper
         end
 
         path_components << "path"
-        [path_components.join("_").to_sym, values]
+        [path_components.map{|p| p.split("::").map{|tip| tip.underscore}.join("_")}.join("_").to_sym, values]
       end
 
       private
@@ -52,15 +54,15 @@ module Ans::Feature::Helpers::PathHelper
             values << value
           end
         }
-        [model, Object.const_get(model.camelize).send("find_by_#{conditions.join("_and_")}!", *values)]
+        [model, modelize(model.camelize).send("find_by_#{conditions.join("_and_")}!", *values)]
       end
       def find_by_models(models,column,value)
         model = models.pop
-        value = Object.const_get(model.camelize).send("find_by_#{column.split(",").join("_and_")}!", *value.split(",")).id
+        value = modelize(model.camelize).send("find_by_#{column.split(",").join("_and_")}!", *value.split(",")).id
         column = "#{model}_id"
         until models.blank?
           model = models.pop
-          value = Object.const_get(model.camelize).send("find_by_#{column}!", value).id
+          value = modelize(model.camelize).send("find_by_#{column}!", value).id
           column = "#{model}_id"
         end
         [column, value]

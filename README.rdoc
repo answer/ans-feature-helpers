@@ -36,6 +36,8 @@ features/support/path.rb に以下を記述
 
 * 'member'一覧(send)
 
+* 'Manage::Member'一覧(send)
+
 基本的に、 'controller'の{action} というようにパスを指定する
 
 最終的に、 "#{controller}_path" というようなパスに整形される
@@ -49,6 +51,8 @@ has_one の関係なら、 (member_log.member.name=田中) というように、
 "'member'一覧(send)" は、 resource member の collection :send なパス : send_members に整形される
 
 日付時刻カラムは *_H=時間 で指定することができ、「時間」部分は Time.parse で処理される
+
+モデルの部分はモデルクラス名を指定することが出来る
 
 
 == ans-feature-helpers/step_definitions/model_steps.rb

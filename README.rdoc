@@ -37,6 +37,7 @@ features/support/path.rb に以下を記述
 * 'member'一覧(send)
 
 * 'Manage::Member'一覧(send)
+* 'Manage::Member(not_exist)'詳細
 
 基本的に、 'controller'の{action} というようにパスを指定する
 
@@ -53,6 +54,8 @@ has_one の関係なら、 (member_log.member.name=田中) というように、
 日付時刻カラムは *_H=時間 で指定することができ、「時間」部分は Time.parse で処理される
 
 モデルの部分はモデルクラス名を指定することが出来る
+
+条件に not_exist を指定すると、存在しないモデルのパスを生成する
 
 
 == ans-feature-helpers/step_definitions/model_steps.rb

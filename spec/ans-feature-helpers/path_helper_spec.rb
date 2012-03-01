@@ -45,6 +45,8 @@ module Ans::Feature::Helpers::PathHelper
       end
 
       @items = {
+        zero: 0,
+
         item: Object.new,
         item2: Object.new,
         item3: Object.new,
@@ -112,6 +114,7 @@ module Ans::Feature::Helpers::PathHelper
 
       [ "'Ans::MyController'一覧",                     [:ans_my_controllers_path, []] ],
       [ "'Ans::MyController(name=名前,value=値)'詳細", [:ans_my_controller_path, [:item]], [:ans_controller_values] ],
+      [ "'Ans::MyController(not_exist)'詳細",          [:ans_my_controller_path, [:zero]] ],
     ].each do |path,expect,stub_procs|
       describe "#{path}" do
         it "で、 #{expect[0]} を返す" do

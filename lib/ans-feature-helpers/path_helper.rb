@@ -42,6 +42,10 @@ module Ans::Feature::Helpers::PathHelper
       private
 
       def find_by_conditions(model,condition)
+        if condition == "not_exist"
+          return [model, 0]
+        end
+
         conditions, values = [[],[]].tap{|conditions,values|
           condition_match(condition).each do |column,value|
             models = column.split(".")

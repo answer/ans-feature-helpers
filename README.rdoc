@@ -63,7 +63,7 @@ has_one の関係なら、 (member_log.member.name=田中) というように、
 step_definitions のどれかで require することで、以下の step が追加される
 
 
-=== 前提 以下の"..."をクリアする
+=== 前提 "..."をクリアする
 
 ... に Member 等を指定すると、 Member.delete_all する
 

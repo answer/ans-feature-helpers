@@ -1,3 +1,5 @@
+require "ans-releaser"
+
 class Ans::Feature::Helpers::Task
   include Ans::Releaser::GemTask
 
@@ -15,3 +17,5 @@ class Ans::Feature::Helpers::Task
     "/var/www/gem/public"
   end
 end
+
+Ans::Feature::Helpers::Task.install_tasks

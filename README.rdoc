@@ -77,6 +77,11 @@ has_one の関係なら、 member_log.member.name というように、チェー
 日付時刻カラムは *_H=時間 で指定することができ、「時間」部分は Time.parse で処理される
 
 
+=== 前提 以下のFabricate"..."が存在する:
+
+Fabricate で用意したデータを投入する
+
+
 === ならば 以下の"..."が存在すること:
 
  ならば 以下の"Member(login_id)"が存在すること:

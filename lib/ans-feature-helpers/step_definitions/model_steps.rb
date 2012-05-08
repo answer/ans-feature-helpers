@@ -23,18 +23,25 @@ Given /^以下の"([^"]*)"が存在する:$/ do |model,table|
     end
   })
 end
-Given /^以下の(?:Fabricate)"([^"]*)"が存在する:$/ do |model,table|
+Given /^以下の(Fabricate|FactoryGirl)"([^"]*)"が存在する:$/ do |type,model,table|
   class << self
     include Ans::Feature::Helpers::ModelHelper
   end
 
   table.hashes.each do |hash|
-    Fabricate(model.split("::").pop.underscore.singularize.to_sym,{}.tap{|row|
+    model_name = model.split("::").pop.underscore.singularize.to_sym
+    fixture_row = {}.tap{|row|
       hash.each do |name,value|
         name, value = column_pair name,value
         row[name] = value
       end
-    })
+    }
+    case type
+    when "Fabricate"
+      Fabricate(model_name,fixture_row)
+    when "FactoryGirl"
+      FactoryGirl.create(model_name,fixture_row)
+    end
   end
 end
 Then /^以下の"([^"(]*)\(([^")]*)\)"が存在すること:$/ do |model,keys,table|

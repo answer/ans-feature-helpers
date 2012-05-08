@@ -82,6 +82,11 @@ has_one の関係なら、 member_log.member.name というように、チェー
 Fabricate で用意したデータを投入する
 
 
+=== 前提 以下のFactoryGirl"..."が存在する:
+
+FactoryGirl.create で用意したデータを投入する
+
+
 === ならば 以下の"..."が存在すること:
 
  ならば 以下の"Member(login_id)"が存在すること:

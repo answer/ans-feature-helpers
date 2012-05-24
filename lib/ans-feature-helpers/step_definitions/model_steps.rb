@@ -44,6 +44,23 @@ Given /^以下の(Fabricate|FactoryGirl)"([^"]*)"が存在する:$/ do |type,mod
     end
   end
 end
+Given /^"([^"(]*)\(([^")]*)\)"が以下である:$/ do |model,keys,table|
+  class << self
+    include Ans::Feature::Helpers::ModelHelper
+  end
+
+  table.hashes.each do |hash|
+    item = find! model,keys,hash
+
+    hash.each do |name,value|
+      if name != keys
+        item[name] = value
+      end
+    end
+
+    item.save!
+  end
+end
 Then /^以下の"([^"(]*)\(([^")]*)\)"が存在すること:$/ do |model,keys,table|
   class << self
     include Ans::Feature::Helpers::ModelHelper

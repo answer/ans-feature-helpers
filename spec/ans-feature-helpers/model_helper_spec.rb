@@ -18,7 +18,16 @@ module Ans::Feature::Helpers
 
     describe "#find" do
       before do
-        class ::AnsFeatureHelpersModelHelperSpecHelperFind; end
+        class ::AnsFeatureHelpersModelHelperSpecHelperFind
+          class << self
+            def find_by_key1_and_key2_and_key3(*args)
+              "fazzy: #{args.join(",")}"
+            end
+            def find_by_key1_and_key2_and_key3!(*args)
+              "strict: #{args.join(",")}"
+            end
+          end
+        end
 
         @model = "ans_feature_helpers_model_helper_spec_helper_find"
         @keys = "key1,key2,key3"
@@ -29,11 +38,6 @@ module Ans::Feature::Helpers
           "key4" => "value4",
           "key5" => "value5",
         }
-        @value_fazzy = Object.new
-        @value_strict = Object.new
-
-        stub(AnsFeatureHelpersModelHelperSpecHelperFind).find_by_key1_and_key2_and_key3("value1", "value2", "value3"){@value_fazzy}
-        stub(AnsFeatureHelpersModelHelperSpecHelperFind).find_by_key1_and_key2_and_key3!("value1", "value2", "value3"){@value_strict}
       end
 
       context "!なしメソッド" do
@@ -43,7 +47,7 @@ module Ans::Feature::Helpers
           end
         end
         it "は、指定したキーの値を取得する" do
-          action_は.should == @value_fazzy
+          action_は.should == "fazzy: value1,value2,value3"
         end
       end
 
@@ -54,7 +58,7 @@ module Ans::Feature::Helpers
           end
         end
         it "は、指定したキーの値を取得する" do
-          action_は.should == @value_strict
+          action_は.should == "strict: value1,value2,value3"
         end
       end
     end
@@ -98,27 +102,65 @@ module Ans::Feature::Helpers
 
       context "チェーンで記述されている場合" do
         before do
-          class ::AnsFeatureHelpersModelHelperSpecHelperColumnPair1; end
-          class ::AnsFeatureHelpersModelHelperSpecHelperColumnPair2; end
-          class ::AnsFeatureHelpersModelHelperSpecHelperColumnPair3; end
-
           @name = "ans_feature_helpers_model_helper_spec_helper_column_pair1.ans_feature_helpers_model_helper_spec_helper_column_pair2.ans_feature_helpers_model_helper_spec_helper_column_pair3.name"
           @value = "value"
 
-          @model1 = Object.new
-          @model2 = Object.new
-          @model3 = Object.new
+          class ::AnsFeatureHelpersModelHelperSpecHelperColumnPair_Model
+            def id=(id)
+              @id = id
+            end
+            def id
+              @id
+            end
+          end
+
+          @model1 = ::AnsFeatureHelpersModelHelperSpecHelperColumnPair_Model.new
+          @model2 = ::AnsFeatureHelpersModelHelperSpecHelperColumnPair_Model.new
+          @model3 = ::AnsFeatureHelpersModelHelperSpecHelperColumnPair_Model.new
 
           @id1 = Object.new
           @id2 = Object.new
           @id3 = Object.new
 
-          stub(AnsFeatureHelpersModelHelperSpecHelperColumnPair3).find_by_name!(@value){@model3}
-          stub(@model3).id{@id3}
-          stub(AnsFeatureHelpersModelHelperSpecHelperColumnPair2).find_by_ans_feature_helpers_model_helper_spec_helper_column_pair3_id!(@id3){@model2}
-          stub(@model2).id{@id2}
-          stub(AnsFeatureHelpersModelHelperSpecHelperColumnPair1).find_by_ans_feature_helpers_model_helper_spec_helper_column_pair2_id!(@id2){@model1}
-          stub(@model1).id{@id1}
+          @model1.id = @id1
+          @model2.id = @id2
+          @model3.id = @id3
+
+          class ::AnsFeatureHelpersModelHelperSpecHelperColumnPair1
+            class << self
+              def model=(model)
+                @model = model
+              end
+              def find_by_ans_feature_helpers_model_helper_spec_helper_column_pair2_id!(value)
+                @model
+              end
+            end
+          end
+          ::AnsFeatureHelpersModelHelperSpecHelperColumnPair1.model = @model1
+
+          class ::AnsFeatureHelpersModelHelperSpecHelperColumnPair2
+            class << self
+              def model=(model)
+                @model = model
+              end
+              def find_by_ans_feature_helpers_model_helper_spec_helper_column_pair3_id!(value)
+                @model
+              end
+            end
+          end
+          ::AnsFeatureHelpersModelHelperSpecHelperColumnPair2.model = @model2
+
+          class ::AnsFeatureHelpersModelHelperSpecHelperColumnPair3
+            class << self
+              def model=(model)
+                @model = model
+              end
+              def find_by_name!(value)
+                @model
+              end
+            end
+          end
+          ::AnsFeatureHelpersModelHelperSpecHelperColumnPair3.model = @model3
         end
         it "は、モデルのチェーンを解決する" do
           action_は.should == ["ans_feature_helpers_model_helper_spec_helper_column_pair1_id", @id1]
@@ -128,9 +170,6 @@ module Ans::Feature::Helpers
 
     describe "#convert_name_value" do
       before do
-        now = Time.parse("2011/01/01 10:00:00")
-        stub(Time).now{now}
-
         action_は do
           helper.convert_name_value @name, @value
         end
@@ -163,6 +202,32 @@ module Ans::Feature::Helpers
           end
           action_は do
             helper.modelize "Ans::FeatureHelpersModelHelperSpecHelperModelize"
+          end
+        end
+        it "は、適切なクラスを取得する" do
+          action_は.should == ::Ans::FeatureHelpersModelHelperSpecHelperModelize
+        end
+      end
+
+      context "モジュールを含むが、モジュールの下ではなく、トップに定義されている場合" do
+        before do
+          class FeatureHelpersModelHelperSpecHelperModelize; end
+          action_は do
+            helper.modelize "Ans::FeatureHelpersModelHelperSpecHelperModelize"
+          end
+        end
+        it "は、適切なクラスを取得する" do
+          action_は.should == ::FeatureHelpersModelHelperSpecHelperModelize
+        end
+      end
+
+      context "モジュールを含むが、モジュールの下ではなく、上位に定義されている場合" do
+        before do
+          module ::Ans
+            class FeatureHelpersModelHelperSpecHelperModelize; end
+          end
+          action_は do
+            helper.modelize "Ans::Sub::FeatureHelpersModelHelperSpecHelperModelize"
           end
         end
         it "は、適切なクラスを取得する" do

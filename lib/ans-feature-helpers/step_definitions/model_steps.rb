@@ -23,7 +23,7 @@ Given /^以下の"([^"]*)"が存在する:$/ do |model,table|
     end
   })
 end
-Given /^以下の(Fabricate|FactoryGirl)"([^"]*)"が存在する:$/ do |type,model,table|
+Given /^以下(?:を持つ|の(Fabricate|FactoryGirl))"([^"]*)"が存在する:$/ do |type,model,table|
   class << self
     include Ans::Feature::Helpers::ModelHelper
   end
@@ -36,11 +36,20 @@ Given /^以下の(Fabricate|FactoryGirl)"([^"]*)"が存在する:$/ do |type,mod
         row[name] = value
       end
     }
-    case type
-    when "Fabricate"
-      Fabricate(model_name,fixture_row)
-    when "FactoryGirl"
-      FactoryGirl.create(model_name,fixture_row)
+    if type
+      case type
+      when "Fabricate"
+        Fabricate(model_name,fixture_row)
+      when "FactoryGirl"
+        FactoryGirl.create(model_name,fixture_row)
+      end
+    else
+      case
+      when defined? Fabricate
+        Fabricate(model_name,fixture_row)
+      when defined? FactoryGirl
+        FactoryGirl.create(model_name,fixture_row)
+      end
     end
   end
 end

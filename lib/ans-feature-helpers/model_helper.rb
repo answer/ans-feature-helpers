@@ -64,11 +64,10 @@ module Ans::Feature::Helpers::ModelHelper
 
     parent = Object
     hierarchy.each do |p|
-      if p == ""
-        parent = Object
-      else
-        parent = parent.const_get(p)
-      end
+      break if p == ""
+      break unless parent.const_defined? p
+
+      parent = parent.const_get p
     end
 
     parent.const_get(model_class)

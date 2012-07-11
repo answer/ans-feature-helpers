@@ -211,13 +211,13 @@ module Ans::Feature::Helpers
 
       context "モジュールを含むが、モジュールの下ではなく、トップに定義されている場合" do
         before do
-          class FeatureHelpersModelHelperSpecHelperModelize; end
+          class ::AnsFeatureHelpersModelHelperSpecHelperModelize; end
           action_は do
-            helper.modelize "Ans::FeatureHelpersModelHelperSpecHelperModelize"
+            helper.modelize "Ans::AnsFeatureHelpersModelHelperSpecHelperModelize"
           end
         end
         it "は、適切なクラスを取得する" do
-          action_は.should == ::FeatureHelpersModelHelperSpecHelperModelize
+          action_は.should == ::AnsFeatureHelpersModelHelperSpecHelperModelize
         end
       end
 
